@@ -3,10 +3,428 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <meta http-equiv="X-UA-Compatible" content="ie=edge">
-    <title>first</title>
+    <title>JungleLee | Backend Engineer</title>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/feather-icons/4.29.0/feather.min.js"></script>
+    <style>
+        /* --- VARIABLES & RESET --- */
+        :root {
+            --bg-color: #0f172a;
+            --card-bg: #1e293b;
+            --text-primary: #e2e8f0;
+            --text-secondary: #94a3b8;
+            --accent-color: #38bdf8; /* Sky Blue */
+            --accent-glow: 0 0 20px rgba(56, 189, 248, 0.5);
+            --folder-color: #eab308; /* Yellow for folders */
+            --font-main: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+            --font-code: 'Fira Code', 'Consolas', monospace;
+        }
+
+        * { margin: 0; padding: 0; box-sizing: border-box; scroll-behavior: smooth; }
+
+        body {
+            background-color: var(--bg-color);
+            color: var(--text-primary);
+            font-family: var(--font-main);
+            line-height: 1.6;
+            overflow-x: hidden;
+        }
+
+        /* --- LAYOUT UTILITIES --- */
+        .container { max-width: 1100px; margin: 0 auto; padding: 0 20px; }
+        section { padding: 80px 0; }
+        .section-title {
+            font-size: 2rem;
+            margin-bottom: 40px;
+            position: relative;
+            display: inline-block;
+            font-family: var(--font-code);
+        }
+        .section-title::after {
+            content: '';
+            position: absolute;
+            bottom: -10px;
+            left: 0;
+            width: 60px;
+            height: 4px;
+            background: var(--accent-color);
+            box-shadow: var(--accent-glow);
+        }
+
+        /* --- NAVIGATION --- */
+        nav {
+            position: fixed;
+            top: 0; left: 0; width: 100%;
+            background: rgba(15, 23, 42, 0.95);
+            backdrop-filter: blur(10px);
+            z-index: 1000;
+            border-bottom: 1px solid rgba(255,255,255,0.1);
+        }
+        .nav-content {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            height: 70px;
+        }
+        .logo { font-family: var(--font-code); font-weight: bold; font-size: 1.2rem; color: var(--accent-color); }
+        .nav-links a {
+            color: var(--text-secondary);
+            text-decoration: none;
+            margin-left: 25px;
+            transition: color 0.3s;
+            font-size: 0.9rem;
+            font-family: var(--font-code);
+        }
+        .nav-links a:hover { color: var(--accent-color); }
+
+        /* --- HERO SECTION --- */
+        #hero {
+            height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            text-align: center;
+            padding-top: 0;
+        }
+        .hero-content h1 {
+            font-size: 3.5rem;
+            margin-bottom: 10px;
+            background: linear-gradient(to right, #fff, #94a3b8);
+            -webkit-background-clip: text;
+            color: transparent;
+        }
+        .hero-content p {
+            font-size: 1.2rem;
+            color: var(--text-secondary);
+            margin-bottom: 30px;
+            font-family: var(--font-code);
+        }
+        .btn {
+            display: inline-block;
+            padding: 12px 24px;
+            background: transparent;
+            border: 1px solid var(--accent-color);
+            color: var(--accent-color);
+            text-decoration: none;
+            border-radius: 5px;
+            transition: all 0.3s;
+            font-family: var(--font-code);
+        }
+        .btn:hover {
+            background: rgba(56, 189, 248, 0.1);
+            box-shadow: var(--accent-glow);
+        }
+
+        /* --- EXPERIENCE CARDS --- */
+        .grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(350px, 1fr));
+            gap: 20px;
+        }
+        .card {
+            background: var(--card-bg);
+            padding: 30px;
+            border-radius: 8px;
+            transition: transform 0.3s, border-color 0.3s;
+            border: 1px solid rgba(255,255,255,0.05);
+            display: flex;
+            flex-direction: column;
+        }
+        .card:hover {
+            transform: translateY(-5px);
+            border-color: var(--accent-color);
+        }
+        .card-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 15px;
+        }
+        .company-name { font-size: 1.4rem; font-weight: bold; color: #fff; }
+        .role-title { color: var(--accent-color); font-family: var(--font-code); font-size: 0.9rem; margin-bottom: 15px; display: block;}
+        .card p { color: var(--text-secondary); font-size: 0.95rem; margin-bottom: 20px; flex-grow: 1; }
+
+        .tech-stack { margin-top: auto; }
+        .tech-stack span {
+            display: inline-block;
+            background: rgba(56, 189, 248, 0.1);
+            color: var(--accent-color);
+            padding: 4px 8px;
+            border-radius: 4px;
+            font-size: 0.75rem;
+            margin-right: 5px;
+            margin-bottom: 5px;
+            font-family: var(--font-code);
+        }
+
+        /* --- FILE MANAGER (BLOG) --- */
+        .terminal-window {
+            background: #111;
+            border-radius: 8px;
+            border: 1px solid rgba(255,255,255,0.1);
+            overflow: hidden;
+            font-family: var(--font-code);
+        }
+        .terminal-header {
+            background: #1e293b;
+            padding: 10px 15px;
+            display: flex;
+            align-items: center;
+            border-bottom: 1px solid rgba(255,255,255,0.1);
+        }
+        .dots { display: flex; gap: 6px; margin-right: 15px; }
+        .dot { width: 10px; height: 10px; border-radius: 50%; }
+        .red { background: #ef4444; } .yellow { background: #eab308; } .green { background: #22c55e; }
+        .terminal-title { font-size: 0.8rem; color: var(--text-secondary); }
+
+        .file-system {
+            padding: 20px;
+            color: var(--text-secondary);
+        }
+
+        /* Tree View Styles */
+        .tree-item {
+            cursor: pointer;
+            padding: 4px 0;
+            display: flex;
+            align-items: center;
+            transition: color 0.2s;
+        }
+        .tree-item:hover { color: var(--text-primary); }
+        .tree-item i { margin-right: 8px; width: 16px; height: 16px; }
+        .folder-content {
+            margin-left: 22px;
+            border-left: 1px solid rgba(255,255,255,0.1);
+            display: none; /* Hidden by default */
+        }
+        .folder-content.open { display: block; }
+        .file-link {
+            text-decoration: none;
+            color: inherit;
+            display: flex;
+            align-items: center;
+            width: 100%;
+        }
+        .file-link:hover { color: var(--accent-color); }
+
+        /* --- FOOTER --- */
+        footer {
+            text-align: center;
+            padding: 50px 0;
+            color: var(--text-secondary);
+            font-size: 0.9rem;
+            border-top: 1px solid rgba(255,255,255,0.05);
+        }
+        .social-links a { color: var(--text-secondary); margin: 0 10px; transition: color 0.3s; }
+        .social-links a:hover { color: var(--accent-color); }
+
+        /* --- MOBILE --- */
+        @media (max-width: 768px) {
+            .hero-content h1 { font-size: 2.5rem; }
+            .nav-links { display: none; }
+        }
+    </style>
 </head>
 <body>
-    this is my first
+
+<nav>
+    <div class="container nav-content">
+        <div class="logo">&lt;JungleLee /&gt;</div>
+        <div class="nav-links">
+            <a href="#experience">Experience</a>
+            <a href="#blogs">/_Blogs</a>
+            <a href="#contact">Contact</a>
+        </div>
+    </div>
+</nav>
+
+<section id="hero">
+    <div class="container hero-content">
+        <h1>Hi, I'm <span style="color: var(--accent-color)">JungleLee</span></h1>
+        <p>Backend Software Engineer</p>
+        <p style="font-size: 0.9rem; max-width: 600px; margin: 0 auto 30px auto;">
+            Specializing in high-concurrency systems, Java Ecosystem, and Algorithm Optimization.
+        </p>
+        <div style="margin-bottom: 30px; font-family: var(--font-code); font-size: 0.85rem; color: var(--accent-color);">
+            [ Java, Spring Frameworks, NIO, MySQL, Algorithms ]
+        </div>
+        <a href="#experience" class="btn">View System Architecture Exp</a>
+    </div>
+</section>
+
+<section id="experience">
+    <div class="container">
+        <h2 class="section-title">Work Experience</h2>
+        <div class="grid">
+
+            <div class="card">
+                <div class="card-header">
+                    <span class="company-name">PDD</span>
+                    <i data-feather="server" style="color: var(--accent-color)"></i>
+                </div>
+                <span class="role-title">Backend Engineer</span>
+                <p>Responsible for the demand development and maintenance of core systems.
+                    Key contributions include the ASC process engine system, settlement system,
+                    and fixed asset system architecture modifications and construction.</p>
+                <div class="tech-stack">
+                    <span>Java</span>
+                    <span>Process Engine</span>
+                    <span>Settlement</span>
+                    <span>NIO</span>
+                </div>
+            </div>
+
+            <div class="card">
+                <div class="card-header">
+                    <span class="company-name">Meitu</span>
+                    <i data-feather="layers" style="color: var(--accent-color)"></i>
+                </div>
+                <span class="role-title">Software Engineer</span>
+                <p>Developed the transaction testing subscription mechanism. Managed product lists across platforms,
+                    marketing logic, order management, and renewal functional modules.
+                    Optimized cost management workflows.</p>
+                <div class="tech-stack">
+                    <span>Spring</span>
+                    <span>MySQL</span>
+                    <span>Subscription Logic</span>
+                    <span>Order Mgmt</span>
+                </div>
+            </div>
+
+            <div class="card">
+                <div class="card-header">
+                    <span class="company-name">Technical Proficiency</span>
+                    <i data-feather="cpu" style="color: var(--accent-color)"></i>
+                </div>
+                <span class="role-title">Core Competencies</span>
+                <p>Deep understanding of Algorithm design and Database optimization.
+                    Experienced in handling high-throughput scenarios and NIO frameworks.</p>
+                <div class="tech-stack">
+                    <span>Algorithm</span>
+                    <span>High Concurrency</span>
+                    <span>DB Optimization</span>
+                </div>
+            </div>
+
+        </div>
+    </div>
+</section>
+
+<section id="blogs">
+    <div class="container">
+        <h2 class="section-title">Knowledge Base</h2>
+
+        <div class="terminal-window">
+            <div class="terminal-header">
+                <div class="dots">
+                    <div class="dot red"></div>
+                    <div class="dot yellow"></div>
+                    <div class="dot green"></div>
+                </div>
+                <div class="terminal-title">~/JungleLee/blogs - File Explorer</div>
+            </div>
+
+            <div class="file-system" id="file-browser">
+            </div>
+        </div>
+    </div>
+</section>
+
+<section id="contact" style="padding-bottom: 20px;">
+    <footer>
+        <div class="container">
+            <div class="social-links" style="margin-bottom: 20px;">
+                <a href="#"><i data-feather="github"></i></a>
+                <a href="#"><i data-feather="mail"></i></a>
+                <a href="#"><i data-feather="linkedin"></i></a>
+            </div>
+            <p>JungleLee &copy; 2023. Backend Architecture & Systems.</p>
+        </div>
+    </footer>
+</section>
+
+<script>
+    feather.replace();
+
+    // --- FILE MANAGER LOGIC ---
+
+    /* CONFIGURATION:
+       Since this is a static HTML file, we cannot read your local hard drive directly.
+       Define your folder structure below. The script will render it visually.
+
+       Format:
+       "Folder Name": [
+           { name: "File Name.md", link: "./blogs/subfolder/file.md" },
+           ...
+       ]
+    */
+    const blogStructure = {
+        "Java_Ecosystem": [
+            { name: "Spring_Boot_Internals.md", link: "#" },
+            { name: "NIO_vs_BIO_Analysis.md", link: "#" },
+            { name: "JVM_Tuning_Guide.md", link: "#" }
+        ],
+        "Database_MySQL": [
+            { name: "Index_Optimization.md", link: "#" },
+            { name: "Transaction_Isolation.md", link: "#" }
+        ],
+        "Algorithms": [
+            { name: "Dynamic_Programming_Notes.md", link: "#" },
+            { name: "Graph_Traversal_BFS_DFS.md", link: "#" }
+        ],
+        "System_Design": [
+            { name: "Distributed_Locks.md", link: "#" },
+            { name: "Message_Queue_Patterns.md", link: "#" }
+        ]
+    };
+
+    function renderFileSystem(containerId, structure) {
+        const container = document.getElementById(containerId);
+
+        // Iterate through folders
+        for (const [folderName, files] of Object.entries(structure)) {
+
+            // Create Folder Wrapper
+            const folderDiv = document.createElement('div');
+
+            // Folder Title Row
+            const folderHeader = document.createElement('div');
+            folderHeader.className = 'tree-item';
+            folderHeader.innerHTML = `<i data-feather="folder" style="color: var(--folder-color); fill: var(--folder-color); opacity: 0.2;"></i> <span>${folderName}</span>`;
+
+            // Container for files (hidden by default)
+            const fileListDiv = document.createElement('div');
+            fileListDiv.className = 'folder-content';
+
+            // Toggle Logic
+            folderHeader.addEventListener('click', () => {
+                fileListDiv.classList.toggle('open');
+                const icon = folderHeader.querySelector('i');
+                // Optional: Change icon on open/close if desired
+            });
+
+            // Add Files to Folder
+            files.forEach(file => {
+                const fileDiv = document.createElement('div');
+                fileDiv.className = 'tree-item';
+                fileDiv.innerHTML = `
+                        <a href="${file.link}" class="file-link" target="_blank">
+                            <i data-feather="file-text"></i> <span>${file.name}</span>
+                        </a>
+                    `;
+                fileListDiv.appendChild(fileDiv);
+            });
+
+            folderDiv.appendChild(folderHeader);
+            folderDiv.appendChild(fileListDiv);
+            container.appendChild(folderDiv);
+        }
+
+        // Re-initialize icons for new elements
+        feather.replace();
+    }
+
+    // Initialize the File Manager
+    renderFileSystem('file-browser', blogStructure);
+</script>
 </body>
 </html>
